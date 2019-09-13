@@ -1,0 +1,4 @@
+{
+	"ksql": "CREATE STREAM ips_oipalife_AsXML_body ( BODY STRING ) WITH (KAFKA_TOPIC='ips.oipalife.AsXML.raw', VALUE_FORMAT='DELIMITED');",
+	"streamsProperties": {"auto.offset.reset":"earliest"}
+}

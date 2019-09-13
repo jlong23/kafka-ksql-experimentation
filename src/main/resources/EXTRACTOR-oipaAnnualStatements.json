@@ -1,0 +1,38 @@
+{
+  "keySeperator": ",",
+  "extractValues": [
+    {
+      "name": "ACTIVITY_GUID",
+      "xpath": "//AsActivity/Field/FieldName[text()='ActivityGUID']/parent::Field//following-sibling::FieldValue/text()"
+    },
+    {
+      "name": "POLICYNUMBER",
+      "xpath": "//AsPolicy/Field/FieldName[text()='PolicyNumber']/parent::Field//following-sibling::FieldValue/text()"
+    },
+    {
+      "name": "EFFECTIVE_DATE",
+      "xpath": "//AsActivity/Field/FieldName[text()='EffectiveDate']/parent::Field//following-sibling::FieldValue/text()"
+    },
+    {
+      "name": "PROCESS_DATE",
+      "xpath": "//AsActivity/Field/FieldName[text()='ProcessDate']/parent::Field//following-sibling::FieldValue/text()"
+    },
+    {
+      "name": "PRODUCT_ID",
+      "xpath": "//AsPlan/Field/FieldName[text()='ProductIdentifier']/parent::Field//following-sibling::FieldValue/text()"
+    },
+    {
+      "name": "MAILING_STATECODE",
+      "xpath": "//AsAddress[Field[FieldName[text()='AddressGUID'] and FieldValue[text() = //AsRole[Field[FieldValue[text()='Owner']] and Field[FieldName/text() = 'CorrespondenceContactFlag' and FieldValue/text() = 'CHECKED']]/Field[FieldName/text()='AddressGUID']/FieldValue/text()]]]/Field[FieldName[text()='StateCode']]/FieldValue/text()"
+    },
+    {
+      "name": "MESSAGE_ID",
+      "xpath": "//messageHeader/messageID/text()"
+    },
+    {
+      "name": "TRANSACTION_NAME",
+      "xpath": "//messageHeader/TransactionName/text()"
+    }
+  ],
+  "dynamicKey": "TRANSACTION_NAME,KEY_SEPERATOR,PROCESS_DATE,KEY_SEPERATOR,ACTIVITY_GUID,KEY_SEPERATOR,POLICYNUMBER,KEY_SEPERATOR,PRODUCT_ID,KEY_SEPERATOR,MAILING_STATECODE"
+}

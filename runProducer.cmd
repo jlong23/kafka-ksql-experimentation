@@ -1,0 +1,1 @@
+java -cp ./target/oipa-kafka-streaming-0.0.1-SNAPSHOT.jar -Dlog4j.configuration=file:src/main/resources/log4j.properties  com.nationwide.nf.ips.streaming.producer.OipaExampleProducer  --bootstrap.servers %1  --topic %2 --file AnnualStatementTest.xml --messages %3 --delay %4 --extractor EXTRACTOR-oipaAnnualStatements.json

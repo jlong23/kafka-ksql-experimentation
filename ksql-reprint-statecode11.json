@@ -1,0 +1,4 @@
+{
+	"ksql": "CREATE STREAM ips.oipalife.correspondence.statements_reprint_state WITH (kafka_topic='ips.oipalife.correspondence.statements', PARTITIONS=1, value_format='delimited') AS SELECT ips_oipalife_AsXML_body.BODY FROM ips_oipalife_AsXML_index LEFT JOIN ips_oipalife_AsXML_body WITHIN 2 HOUR ON ips_oipalife_AsXML_index.ROWKEY = ips_oipalife_AsXML_body.ROWKEY WHERE  ips_oipalife_AsXML_index.STATECODE='11';",
+	"streamsProperties": {"auto.offset.reset":"earliest"}
+}

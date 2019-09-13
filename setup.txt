@@ -1,0 +1,8 @@
+cd oips-kafka/
+docker-compose up -d
+docker exec -it zookeeper /bin/bash
+
+kafka-topics --create --topic ips.oipalife.AsXML.raw --partitions 2 --replication-factor 1 --if-not-exists --zookeeper localhost:2181
+kafka-topics --create --topic ips.oipalife.correspondence.statements --partitions 2 --replication-factor 1 --if-not-exists --zookeeper localhost:2181
+kafka-topics --create --topic ips.oipalife.correspondence.sweeps --partitions 2 --replication-factor 1 --if-not-exists --zookeeper localhost:2181
+kafka-topics --create --topic ips.oipalife.correspondence.all --partitions 2 --replication-factor 1 --if-not-exists --zookeeper localhost:2181

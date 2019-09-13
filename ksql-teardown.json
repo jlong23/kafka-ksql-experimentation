@@ -1,0 +1,3 @@
+{
+	"ksql": "TERMINATE CSAS_STATEMENTS_REPRINT_0; DROP STREAM ips.oipalife.correspondence.statements_reprint;"
+}
