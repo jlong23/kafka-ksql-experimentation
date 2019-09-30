@@ -1,17 +1,18 @@
-version: '3.5'
+version: '3.7'
 services:
     zookeeper:
         container_name: "zookeeper"
-        image: 'confluentinc/cp-zookeeper:latest'
+        image: 'confluentinc/cp-zookeeper:5.3.1'
         ports:
             - "2181:2181"
         environment:
             - 'zk_id=1'
             - 'ZOOKEEPER_CLIENT_PORT=2181'
         network_mode: "host"
+        restart: always
     kafka:
         container_name: "kafka"
-        image: 'confluentinc/cp-kafka:latest'
+        image: 'confluentinc/cp-kafka:5.3.1'
         depends_on:
             - zookeeper
         ports:
@@ -21,9 +22,10 @@ services:
             - 'KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092'
             - 'KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1'
         network_mode: "host"
+        restart: always
     schema-registry:
         container_name: "schema-registry"
-        image: 'confluentinc/cp-schema-registry:5.0.1'
+        image: 'confluentinc/cp-schema-registry:5.3.1'
         depends_on:
             - kafka
             - zookeeper
@@ -32,9 +34,10 @@ services:
             - 'SCHEMA_REGISTRY_HOST_NAME=schema-registry'
             - 'SCHEMA_REGISTRY_LISTENERS=http://0.0.0.0:8081'
         network_mode: "host"
+        restart: always
     rest-proxy:
         container_name: "rest-proxy"
-        image: 'confluentinc/cp-kafka-rest:latest'
+        image: 'confluentinc/cp-kafka-rest:5.3.1'
         depends_on:
             - kafka
             - zookeeper
@@ -47,6 +50,7 @@ services:
             - 'KAFKA_REST_SCHEMA_REGISTRY_URL=http://localhost:8081'
             - 'KAFKA_REST_HOST_NAME=rest-proxy'
         network_mode: "host"
+        restart: always
     ksql-server:
         container_name: "ksql-server"
         image: 'confluentinc/cp-ksql-server:5.0.1'
@@ -57,11 +61,12 @@ services:
             - zookeeper
         environment:
             - 'KSQL_BOOTSTRAP_SERVERS=localhost:9092'
-            - 'KSQL_OPTS=-Dksql.service.id=confluent_test_3_ -Dlisteners=http://                                                                                                                                                             0.0.0.0:8088/'
+            - 'KSQL_OPTS=-Dksql.service.id=confluent_test_3_ -Dlisteners=http://0.0.0.0:8088/'
         network_mode: "host"
+        restart: always
     control-center:
         container_name: "control-center"
-        image: 'confluentinc/cp-enterprise-control-center:latest'
+        image: 'confluentinc/cp-enterprise-control-center:5.3.1'
         depends_on:
             - kafka
             - schema-registry
@@ -71,9 +76,7 @@ services:
         ports:
             - "9021:9021"
         volumes:
-            - type: 'volume'
-              source: ccdata
-              target: '/var/lib/confluent-control-center'
+            - '/var/lib/confluent-control-center:/home/ec2-user/dockervol/control-center'
         environment:
             - 'CONTROL_CENTER_ZOOKEEPER_CONNECT=localhost:2181'
             - 'CONTROL_CENTER_BOOTSTRAP_SERVERS=localhost:9092'
@@ -84,8 +87,18 @@ services:
             - 'CONTROL_CENTER_CONNECT_CLUSTER=http://localhost:8082'
             - 'CONTROL_CENTER_KSQL_URL=http://localhost:8088'
         network_mode: "host"
-
-
-volumes:
-   ccdata:
-   projdata:
+        restart: always
+    oipa-processor:
+        container_name: "oipa-processor"
+        build: 
+            context: ./
+            dockerfile: ./docker-processor/Dockerfile
+        image: 'longj23/oipa-processor'
+        depends_on:
+            - kafka
+            - schema-registry
+            - rest-proxy
+            - ksql-server
+            - zookeeper
+        network_mode: "host"
+        restart: always
